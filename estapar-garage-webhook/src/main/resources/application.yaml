@@ -1,0 +1,18 @@
+server:
+  port: 3003
+spring:
+  application:
+    name: estapar-garage-webhook
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db_estapar
+    driverClassName: org.postgresql.Driver
+    username: postgres
+    password: suasenha123
+    jpa:
+      properties:
+        hibernate:
+          format_sql: false
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      show-sql: true
+      hibernate:
+        ddl-auto: update #Utilizando essa config devido ser apenas um teste, para um sistema profissional utilizaria algum gerenciador como o flyway por exemplo
