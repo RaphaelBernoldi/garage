@@ -16,3 +16,7 @@ spring:
       show-sql: true
       hibernate:
         ddl-auto: update #Utilizando essa config devido ser apenas um teste, para um sistema profissional utilizaria algum gerenciador como o flyway por exemplo
+app:
+  feign:
+    host:
+      garage-sim: http://localhost:3000/
