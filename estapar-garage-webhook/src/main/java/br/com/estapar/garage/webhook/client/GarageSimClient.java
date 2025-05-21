@@ -1,4 +1,4 @@
-package br.com.estapar.garage.webhook.it;
+package br.com.estapar.garage.webhook.client;
 
 import br.com.estapar.garage.webhook.model.dto.GarageConfigResponse;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -1,6 +1,6 @@
 package br.com.estapar.garage.webhook.service;
 
-import br.com.estapar.garage.webhook.it.GarageSimClient;
+import br.com.estapar.garage.webhook.client.GarageSimClient;
 import br.com.estapar.garage.webhook.model.dto.GarageConfigResponse;
 import br.com.estapar.garage.webhook.model.dto.GarageSectorResponse;
 import br.com.estapar.garage.webhook.model.dto.ParkingSpotResponse;

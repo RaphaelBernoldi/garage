@@ -1,6 +1,6 @@
-package br.com.estapar.garage.webhook.it.client;
+package br.com.estapar.garage.webhook.client.client;
 
-import br.com.estapar.garage.webhook.it.GarageSimClient;
+import br.com.estapar.garage.webhook.client.GarageSimClient;
 import br.com.estapar.garage.webhook.model.dto.GarageConfigResponse;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
