@@ -14,8 +14,7 @@ import java.util.UUID;
 public class OccupationEntity {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false)
+    @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
 
     private String licensePlate;
@@ -46,6 +45,7 @@ public class OccupationEntity {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
+        uuid = UUID.randomUUID();
     }
     @PreUpdate
     protected void onUpdate() {

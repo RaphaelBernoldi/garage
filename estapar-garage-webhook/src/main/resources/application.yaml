@@ -8,15 +8,15 @@ spring:
     driverClassName: org.postgresql.Driver
     username: postgres
     password: suasenha123
-    jpa:
-      properties:
-        hibernate:
-          default_schema: public
-          format_sql: true
-      database-platform: org.hibernate.dialect.PostgreSQLDialect
-      show-sql: true
+  jpa:
+    properties:
       hibernate:
-        ddl-auto: update #Utilizando essa config devido ser apenas um teste, para um sistema profissional utilizaria algum gerenciador como o flyway por exemplo
+        default_schema: public
+        format_sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: create #Utilizando essa config devido ser apenas um teste, para um sistema profissional utilizaria algum gerenciador como o flyway por exemplo
 app:
   feign:
     host:

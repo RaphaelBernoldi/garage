@@ -13,8 +13,7 @@ import java.util.UUID;
 public class SectorEntity {
 
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false)
+    @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
     private String name;
     private Double basePrice;
@@ -25,4 +24,11 @@ public class SectorEntity {
     @Column(columnDefinition = "DATE")
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOperation;
+
+    @PrePersist
+    public void prePersist() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+    }
 }

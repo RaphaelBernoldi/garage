@@ -10,8 +10,7 @@ import java.util.UUID;
 @Table(name = "tb_spot")
 public class SpotEntity {
     @Id
-    @GeneratedValue
-    @Column(columnDefinition = "UUID DEFAULT gen_random_uuid()", updatable = false)
+    @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
     private Integer id;
     @JoinColumn(name = "id_sector", referencedColumnName = "uuid")
@@ -20,4 +19,11 @@ public class SpotEntity {
     private Double lat;
     private Double lng;
     private Boolean occupied;
+
+    @PrePersist
+    public void prePersist() {
+        if (uuid == null) {
+            uuid = UUID.randomUUID();
+        }
+    }
 }
