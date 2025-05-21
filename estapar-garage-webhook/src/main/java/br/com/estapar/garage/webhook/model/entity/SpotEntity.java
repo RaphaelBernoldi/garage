@@ -1,6 +1,7 @@
 package br.com.estapar.garage.webhook.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "tb_spot")
+@Builder
 public class SpotEntity {
     @Id
     @Column(name = "uuid", updatable = false, nullable = false)

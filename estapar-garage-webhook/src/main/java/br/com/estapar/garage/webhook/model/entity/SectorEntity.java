@@ -1,6 +1,7 @@
 package br.com.estapar.garage.webhook.model.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,6 +11,7 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "tb_sector")
+@Builder
 public class SectorEntity {
 
     @Id
