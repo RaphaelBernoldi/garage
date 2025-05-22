@@ -27,7 +27,6 @@ public class ValidationOperation {
            case ENTRY -> validator.validate(request, GroupEntry.class);
            case PARKED -> validator.validate(request, GroupParked.class);
            case EXIT -> validator.validate(request, GroupExit.class);
-           default -> null;
        };
 
         if (Objects.nonNull(violations) && !violations.isEmpty()) {
