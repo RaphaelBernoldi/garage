@@ -1,14 +1,18 @@
 package br.com.estapar.garage.webhook.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
 @Data
 @Entity
 @Table(name = "tb_spot")
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class SpotEntity {
     @Id

@@ -3,6 +3,7 @@ package br.com.estapar.garage.webhook.service;
 import br.com.estapar.garage.webhook.client.GarageSimClient;
 import br.com.estapar.garage.webhook.model.dto.GarageConfigResponse;
 import br.com.estapar.garage.webhook.model.dto.GarageSectorResponse;
+import br.com.estapar.garage.webhook.model.dto.OccupanceBalanceDTO;
 import br.com.estapar.garage.webhook.model.dto.ParkingSpotResponse;
 import br.com.estapar.garage.webhook.model.entity.SectorEntity;
 import br.com.estapar.garage.webhook.model.entity.SpotEntity;
@@ -30,6 +31,26 @@ public class GarageSimService {
     public GarageConfigResponse findAllConfigsGarage(){
         log.info("Finding today setup garage");
         return garageSimClient.findAll();
+    }
+
+    public List<OccupanceBalanceDTO> getOccupance(){
+        return sectorRepository
+                .findByDateOperationIsToday()
+                .stream()
+                .map(sector -> {
+                    long totalOccupied = spotRepository
+                                            .findBySector(sector)
+                                            .stream()
+                                            .filter(SpotEntity::getOccupied)
+                                            .count();
+                    return OccupanceBalanceDTO
+                            .builder()
+                            .sector(sector.getName())
+                            .totalOccupance((totalOccupied / sector.getMaxCapacity()) * 100)
+                            .build();
+                })
+                .toList();
+
     }
 
     public SectorEntity createSector(GarageSectorResponse sectorResponse){

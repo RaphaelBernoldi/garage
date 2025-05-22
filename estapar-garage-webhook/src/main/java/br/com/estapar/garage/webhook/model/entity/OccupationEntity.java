@@ -2,8 +2,10 @@ package br.com.estapar.garage.webhook.model.entity;
 
 import br.com.estapar.garage.webhook.model.enumeration.EnumEventType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
@@ -12,6 +14,8 @@ import java.util.UUID;
 @Data
 @Entity
 @Table(name = "tb_occupation")
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class OccupationEntity {
 

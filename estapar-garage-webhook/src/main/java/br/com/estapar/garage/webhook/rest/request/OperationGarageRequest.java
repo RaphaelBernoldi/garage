@@ -32,11 +32,11 @@ public class OperationGarageRequest {
 
     @NotNull(message = "Lat é obrigatoria para essa operacao", groups = {GroupParked.class})
     @JsonProperty("lat")
-    private Long lat;
+    private Double lat;
 
     @NotNull(message = "Lng é obrigatoria para essa operacao", groups = {GroupParked.class})
     @JsonProperty("lng")
-    private Long lng;
+    private Double lng;
 
     @NotNull(message = "Eventp é obrigatorio")
     @Enumerated(EnumType.STRING)

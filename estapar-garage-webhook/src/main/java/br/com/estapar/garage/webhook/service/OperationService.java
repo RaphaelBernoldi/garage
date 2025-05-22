@@ -1,5 +1,6 @@
 package br.com.estapar.garage.webhook.service;
 
+import br.com.estapar.garage.webhook.operations.ChooseOperation;
 import br.com.estapar.garage.webhook.operations.Operation;
 import br.com.estapar.garage.webhook.rest.request.OperationGarageRequest;
 import br.com.estapar.garage.webhook.rest.request.OperationGarageResponse;
@@ -13,11 +14,12 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class OperationService {
     private final ValidationOperation validationOperation;
+    private final ChooseOperation chooseOperation;
 
     public OperationGarageResponse executeOperation(OperationGarageRequest request){
         log.info("Iniciando execucao da operacao");
         validationOperation.validateFields(request);
-        Operation operation = request.getEventType().getOperation();
+        Operation operation = chooseOperation.getOperation(request.getEventType());
         operation.process(request);
         return null;
     }
