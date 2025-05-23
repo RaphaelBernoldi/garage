@@ -5,6 +5,7 @@ import br.com.estapar.garage.webhook.model.dto.GarageConfigResponse;
 import br.com.estapar.garage.webhook.model.dto.GarageSectorResponse;
 import br.com.estapar.garage.webhook.model.dto.OccupanceBalanceDTO;
 import br.com.estapar.garage.webhook.model.dto.ParkingSpotResponse;
+import br.com.estapar.garage.webhook.model.entity.RevenueEntity;
 import br.com.estapar.garage.webhook.model.entity.SectorEntity;
 import br.com.estapar.garage.webhook.model.entity.SpotEntity;
 import br.com.estapar.garage.webhook.repository.SectorRepository;
@@ -35,10 +36,10 @@ public class GarageSimService {
 
     public List<OccupanceBalanceDTO> getOccupance(){
         return sectorRepository
-                .findByDateOperationIsToday()
+                .findByDateOperation(LocalDate.now())
                 .stream()
                 .map(sector -> {
-                    long totalOccupied = spotRepository
+                   double totalOccupied = spotRepository
                                             .findBySector(sector)
                                             .stream()
                                             .filter(SpotEntity::getOccupied)
@@ -46,13 +47,14 @@ public class GarageSimService {
                     return OccupanceBalanceDTO
                             .builder()
                             .sector(sector.getName())
-                            .totalOccupance((totalOccupied / sector.getMaxCapacity()) * 100)
+                            .totalOccupance((totalOccupied / (double) sector.getMaxCapacity())* 100)
                             .build();
                 })
                 .toList();
 
     }
 
+    @Transactional
     public SectorEntity createSector(GarageSectorResponse sectorResponse){
         log.info("Creating sector...");
         return sectorRepository
@@ -65,6 +67,9 @@ public class GarageSimService {
                         .basePrice(sectorResponse.basePrice())
                         .maxCapacity(sectorResponse.maxCapacity())
                         .durationLimitMinute(sectorResponse.durationLimitMinutes())
+                        .revenue(RevenueEntity
+                                    .builder()
+                                    .build())
                         .build());
     }
 

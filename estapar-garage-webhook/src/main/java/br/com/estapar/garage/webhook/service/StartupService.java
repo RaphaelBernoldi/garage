@@ -1,18 +1,16 @@
 package br.com.estapar.garage.webhook.service;
 
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@AllArgsConstructor
 @Service
+@Slf4j
 public class StartupService {
 
-    @Autowired
-    private GarageSimService garageSimService;
-
-    private Logger log = LoggerFactory.getLogger(StartupService.class);
+    private final GarageSimService garageSimService;
 
     @PostConstruct
     public void init(){

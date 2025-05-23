@@ -10,26 +10,24 @@ import java.util.UUID;
 
 @Data
 @Entity
-@Table(name = "tb_spot")
+@Table(name = "tb_revenue")
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-public class SpotEntity {
+public class RevenueEntity {
+
     @Id
     @Column(name = "uuid", updatable = false, nullable = false)
     private UUID uuid;
-    private Integer id;
-    @JoinColumn(name = "id_sector", referencedColumnName = "uuid")
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
-    private SectorEntity sector;
-    private Double lat;
-    private Double lng;
-    private Boolean occupied;
+    private String currency;
+    private Double amount;
 
     @PrePersist
     public void prePersist() {
         if (uuid == null) {
             uuid = UUID.randomUUID();
         }
+        this.amount = 0.0;
+        this.currency = "R$";
     }
 }

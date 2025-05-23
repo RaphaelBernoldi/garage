@@ -8,5 +8,5 @@ import lombok.Data;
 public class OccupanceBalanceDTO {
 
     private String sector;
-    private Long totalOccupance;
+    private double totalOccupance;
 }

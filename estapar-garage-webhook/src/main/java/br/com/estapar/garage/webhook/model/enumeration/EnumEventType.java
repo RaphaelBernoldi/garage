@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public enum EnumEventType {
 
-      ENTRY()
-    , PARKED()
-    , EXIT();
+      ENTRY
+    , PARKED
+    , EXIT;
 
 }

@@ -41,7 +41,7 @@ public class OccupationEntity {
     private LocalDateTime updatedAt;
 
     @JoinColumn(name = "id_spot", referencedColumnName = "uuid")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.MERGE})
     private SpotEntity spot;
 
     private String detail;

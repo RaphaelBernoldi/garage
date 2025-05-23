@@ -31,6 +31,9 @@ public class SectorEntity {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate dateOperation;
     private Boolean opened;
+    @JoinColumn(name = "id_revenue", referencedColumnName = "uuid")
+    @OneToOne(cascade = CascadeType.ALL)
+    private RevenueEntity revenue;
 
     @PrePersist
     public void prePersist() {
