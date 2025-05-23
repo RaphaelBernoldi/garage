@@ -51,8 +51,8 @@ public class GarageSimService {
                             .build();
                 })
                 .toList();
-
     }
+
 
     @Transactional
     public SectorEntity createSector(GarageSectorResponse sectorResponse){
@@ -80,7 +80,7 @@ public class GarageSimService {
                         .builder()
                         .id(spotBySector.id())
                         .lat(spotBySector.lat())
-                        .occupied(spotBySector.occupied())
+                        .occupied(Boolean.FALSE) // TODO - No response vem true, seria legal alterar a API
                         .lng(spotBySector.lng())
                         .sector(sector)
                         .build());

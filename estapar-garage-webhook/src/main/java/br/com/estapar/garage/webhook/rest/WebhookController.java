@@ -1,7 +1,6 @@
 package br.com.estapar.garage.webhook.rest;
 
 import br.com.estapar.garage.webhook.rest.request.OperationGarageRequest;
-import br.com.estapar.garage.webhook.rest.request.OperationGarageResponse;
 import br.com.estapar.garage.webhook.service.OperationService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -22,8 +21,8 @@ public class WebhookController {
     private final OperationService operationService;
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<OperationGarageResponse>post(@Valid @RequestBody OperationGarageRequest body){
+    public ResponseEntity<String>post(@Valid @RequestBody OperationGarageRequest body){
         log.info("Recebendo requisição POST /webhook body = {}", body);
-        return ResponseEntity.ok(operationService.executeOperation(body));
+        return ResponseEntity.ok("Success");
     }
 }
