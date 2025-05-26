@@ -5,10 +5,9 @@ import br.com.estapar.garage.webhook.model.dto.GarageConfigResponse;
 import br.com.estapar.garage.webhook.model.dto.GarageSectorResponse;
 import br.com.estapar.garage.webhook.model.dto.ParkingSpotResponse;
 import br.com.estapar.garage.webhook.model.entity.SectorEntity;
-import br.com.estapar.garage.webhook.model.entity.SpotEntity;
 import br.com.estapar.garage.webhook.repository.SectorRepository;
-import br.com.estapar.garage.webhook.repository.SpotRepository;
 import br.com.estapar.garage.webhook.service.GarageSimService;
+import br.com.estapar.garage.webhook.service.SpotService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,7 +32,7 @@ class GarageSimServiceTest {
     private SectorRepository sectorRepository;
 
     @Mock
-    private SpotRepository spotRepository;
+    private SpotService spotService;
 
     @InjectMocks
     private GarageSimService garageSimService;
@@ -71,18 +70,6 @@ class GarageSimServiceTest {
         verify(sectorRepository, times(1)).save(any(SectorEntity.class));
     }
 
-    @Test
-    void shouldCreateSpot() {
-        ParkingSpotResponse spotResponse = oneSpot();
-
-        SectorEntity sector = SectorEntity.builder().name("A").build();
-
-        when(spotRepository.save(any(SpotEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-        garageSimService.createSpot(spotResponse, sector);
-
-        verify(spotRepository, times(1)).save(any(SpotEntity.class));
-    }
 
     @Test
     void shouldSetupToday() {
@@ -98,12 +85,11 @@ class GarageSimServiceTest {
 
         when(garageSimClient.findAll()).thenReturn(configResponse);
         when(sectorRepository.save(any(SectorEntity.class))).thenReturn(savedSector);
-        when(spotRepository.save(any(SpotEntity.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
         garageSimService.setupToday();
 
         verify(garageSimClient, times(2)).findAll();
         verify(sectorRepository, times(1)).save(any(SectorEntity.class));
-        verify(spotRepository, times(1)).save(any(SpotEntity.class));
+        verify(spotService, times(1)).createSpot(any(ParkingSpotResponse.class), any(SectorEntity.class));
     }
 }

@@ -1,6 +1,7 @@
 package br.com.estapar.garage.webhook.repository;
 
 import br.com.estapar.garage.webhook.model.entity.OccupationEntity;
+import br.com.estapar.garage.webhook.model.entity.SpotEntity;
 import br.com.estapar.garage.webhook.model.enumeration.EnumEventType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,4 +28,6 @@ public interface OccupationRepository extends JpaRepository<OccupationEntity, UU
             "WHERE o.licensePlate = :licensePlate" +
             " and s.occupied = true" )
     Optional<OccupationEntity>findByLicensePlateJoinFetchSpotAndSectorAndIsOccupied(@Param("licensePlate")String licensePlate);
+
+    OccupationEntity findBySpot(SpotEntity spot);
 }

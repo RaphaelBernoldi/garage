@@ -3,18 +3,15 @@ package br.com.estapar.garage.webhook.operations;
 import br.com.estapar.garage.webhook.exception.BusinessException;
 import br.com.estapar.garage.webhook.model.entity.OccupationEntity;
 import br.com.estapar.garage.webhook.model.entity.SpotEntity;
-import br.com.estapar.garage.webhook.repository.OccupationRepository;
-import br.com.estapar.garage.webhook.repository.SpotRepository;
 import br.com.estapar.garage.webhook.rest.request.OperationGarageRequest;
 import br.com.estapar.garage.webhook.service.OccupationService;
+import br.com.estapar.garage.webhook.service.SpotService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -22,7 +19,7 @@ import java.util.Optional;
 public class OperationParked implements Operation{
 
     private final OccupationService occupationService;
-    private final SpotRepository spotRepository;
+    private final SpotService spotService;
 
     /**
      * TODO - Pelo formato da request eu preciso ter como ponto de amarração lat e lng,
@@ -35,21 +32,22 @@ public class OperationParked implements Operation{
         try{
             log.info("Iniciando operação parked para a placa " + request.getLicensePlate());
             OccupationEntity occupationEntity = occupationService.findByLicensePlate(request.getLicensePlate());
-            SpotEntity spot = spotRepository.findByLatAndLng(request.getLat(), request.getLng());
-            validateSpotOccupied(spot);
-            spot.setOccupied(Boolean.TRUE);
             occupationEntity.setEventType(request.getEventType());
             occupationEntity.setStatus("Success");
             occupationEntity.setDetail("Estacionou sem problemas");
             occupationEntity.setParkedTime(LocalDateTime.now());
 
+            SpotEntity spot = spotService.findByLatAndLng(request.getLat(), request.getLng());
             if(Objects.isNull(spot)){ //TODO - Esse if corrige a falha na operação conforme citado comentario acima
                 occupationEntity.setStatus("Vaga nao encontrada");
                 occupationEntity.setDetail("O cliente estacionou em um vaga desconhecida com lat = " + request.getLat() + " e lng = " + request.getLng());
                 occupationService.save(occupationEntity);
                 return;
             }
-            spotRepository.save(spot);
+
+            validateSpotOccupied(spot);
+            spot.setOccupied(Boolean.TRUE);
+            spotService.save(spot);
             occupationEntity.setSpot(spot);
             occupationService.save(occupationEntity);
 

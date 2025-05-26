@@ -9,9 +9,7 @@ import br.com.estapar.garage.webhook.model.dto.ParkingSpotResponse;
 import br.com.estapar.garage.webhook.model.entity.OccupationEntity;
 import br.com.estapar.garage.webhook.model.entity.RevenueEntity;
 import br.com.estapar.garage.webhook.model.entity.SectorEntity;
-import br.com.estapar.garage.webhook.model.entity.SpotEntity;
 import br.com.estapar.garage.webhook.repository.SectorRepository;
-import br.com.estapar.garage.webhook.repository.SpotRepository;
 import br.com.estapar.garage.webhook.rest.response.PlateStatusResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +30,7 @@ public class GarageSimService {
 
     private final SectorRepository sectorRepository;
 
-    private final SpotRepository spotRepository;
+    private final SpotService spotService;
 
     private final OccupationService occupationService;
 
@@ -46,7 +44,7 @@ public class GarageSimService {
         OccupationEntity occupation = occupationService.findByLicensePlateJoinFetchSpotAndSectorAndIsOccupied(licensePlate);
 
         SectorEntity sector = occupation.getSpot().getSector();
-        OccupanceBalanceDTO totalOccupiedBySector = getTotalOccupiedBySector(sector);
+        OccupanceBalanceDTO totalOccupiedBySector = spotService.getTotalOccupiedBySector(sector);
 
         return PlateStatusResponse
                 .builder()
@@ -62,22 +60,8 @@ public class GarageSimService {
         return sectorRepository
                 .findByDateOperation(LocalDate.now())
                 .stream()
-                .map(this::getTotalOccupiedBySector)
+                .map(spotService::getTotalOccupiedBySector)
                 .toList();
-    }
-
-    public OccupanceBalanceDTO getTotalOccupiedBySector(SectorEntity sector) {
-        log.info("getting total occupation by sector {}", sector.getName());
-        long totalOccupied = spotRepository
-                                .findBySector(sector)
-                                .stream()
-                                .filter(SpotEntity::getOccupied)
-                                .count();
-        return OccupanceBalanceDTO
-                .builder()
-                .sector(sector.getName())
-                .totalOccupance((totalOccupied / (double) sector.getMaxCapacity())* 100)
-                .build();
     }
 
 
@@ -100,24 +84,11 @@ public class GarageSimService {
                         .build());
     }
 
-    public void createSpot(ParkingSpotResponse spotBySector, SectorEntity sector){
-        log.info("Creating spot by sector {}", sector.getName());
-        spotRepository
-                .save(SpotEntity
-                        .builder()
-                        .id(spotBySector.id())
-                        .lat(spotBySector.lat())
-                        .occupied(Boolean.FALSE) // TODO - No response vem true, seria legal alterar a API
-                        .lng(spotBySector.lng())
-                        .sector(sector)
-                        .build());
-    }
-
     private void createSpotsBySector(List<ParkingSpotResponse>spotsResponse, SectorEntity sector){
         spotsResponse
                 .stream()
                 .filter(spot -> spot.sector().equals(sector.getName()))
-                .forEach(spotsBySector -> createSpot(spotsBySector, sector));
+                .forEach(spotsBySector -> spotService.createSpot(spotsBySector, sector));
     }
 
     @Transactional
