@@ -1,15 +1,18 @@
 package br.com.estapar.garage.webhook.service;
 
 import br.com.estapar.garage.webhook.client.GarageSimClient;
+import br.com.estapar.garage.webhook.exception.BusinessException;
 import br.com.estapar.garage.webhook.model.dto.GarageConfigResponse;
 import br.com.estapar.garage.webhook.model.dto.GarageSectorResponse;
 import br.com.estapar.garage.webhook.model.dto.OccupanceBalanceDTO;
 import br.com.estapar.garage.webhook.model.dto.ParkingSpotResponse;
+import br.com.estapar.garage.webhook.model.entity.OccupationEntity;
 import br.com.estapar.garage.webhook.model.entity.RevenueEntity;
 import br.com.estapar.garage.webhook.model.entity.SectorEntity;
 import br.com.estapar.garage.webhook.model.entity.SpotEntity;
 import br.com.estapar.garage.webhook.repository.SectorRepository;
 import br.com.estapar.garage.webhook.repository.SpotRepository;
+import br.com.estapar.garage.webhook.rest.response.PlateStatusResponse;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,6 +20,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static br.com.estapar.garage.webhook.operations.CalculatorPrice.calcComplete;
 
 @Service
 @Slf4j
@@ -29,28 +34,50 @@ public class GarageSimService {
 
     private final SpotRepository spotRepository;
 
+    private final OccupationService occupationService;
+
     public GarageConfigResponse findAllConfigsGarage(){
         log.info("Finding today setup garage");
         return garageSimClient.findAll();
     }
 
+    public PlateStatusResponse findStatusByPlate(String licensePlate) throws BusinessException {
+        log.info("Finding status by plate");
+        OccupationEntity occupation = occupationService.findByLicensePlateJoinFetchSpotAndSectorAndIsOccupied(licensePlate);
+
+        SectorEntity sector = occupation.getSpot().getSector();
+        OccupanceBalanceDTO totalOccupiedBySector = getTotalOccupiedBySector(sector);
+
+        return PlateStatusResponse
+                .builder()
+                .entryTime(occupation.getEntryTime())
+                .timeParked(occupation.getParkedTime())
+                .licensePlate(licensePlate)
+                .priceUntilNow(calcComplete(totalOccupiedBySector.getTotalOccupance(), sector.getBasePrice()))
+                .build();
+    }
+
     public List<OccupanceBalanceDTO> getOccupance(){
+        log.info("Finding occupance resume");
         return sectorRepository
                 .findByDateOperation(LocalDate.now())
                 .stream()
-                .map(sector -> {
-                   double totalOccupied = spotRepository
-                                            .findBySector(sector)
-                                            .stream()
-                                            .filter(SpotEntity::getOccupied)
-                                            .count();
-                    return OccupanceBalanceDTO
-                            .builder()
-                            .sector(sector.getName())
-                            .totalOccupance((totalOccupied / (double) sector.getMaxCapacity())* 100)
-                            .build();
-                })
+                .map(this::getTotalOccupiedBySector)
                 .toList();
+    }
+
+    public OccupanceBalanceDTO getTotalOccupiedBySector(SectorEntity sector) {
+        log.info("getting total occupation by sector {}", sector.getName());
+        long totalOccupied = spotRepository
+                                .findBySector(sector)
+                                .stream()
+                                .filter(SpotEntity::getOccupied)
+                                .count();
+        return OccupanceBalanceDTO
+                .builder()
+                .sector(sector.getName())
+                .totalOccupance((totalOccupied / (double) sector.getMaxCapacity())* 100)
+                .build();
     }
 
 

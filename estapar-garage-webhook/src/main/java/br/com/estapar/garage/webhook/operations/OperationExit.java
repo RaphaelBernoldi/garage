@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static br.com.estapar.garage.webhook.operations.CalculatorPrice.*;
+
 @Service
 @AllArgsConstructor
 @Slf4j
@@ -49,24 +51,8 @@ public class OperationExit implements Operation{
                                                     .peek(o -> o.getSector().equals(sector.getName()))
                                                     .findAny()
                                                     .orElseThrow(() -> new BusinessException("Falha ao calcular valor, setor nao encontrado"));
-        double result = 0d;
-        result = calcLess25Percent(occupanceBalanceDTO.getTotalOccupance(), sector.getBasePrice(), result);
-        result = calcBetween25And50Percent(occupanceBalanceDTO.getTotalOccupance(), sector.getBasePrice(), result);
-        result = calcBetween50And75Percent(occupanceBalanceDTO.getTotalOccupance(), sector.getBasePrice(), result);
-        result = calcBigger75Percent(occupanceBalanceDTO.getTotalOccupance(), sector.getBasePrice(), result);
-        return result;
+        return calcComplete(occupanceBalanceDTO.getTotalOccupance(), sector.getBasePrice());
     }
 
-    private double calcLess25Percent(double totalOccupance, double basePrice,  double result){
-        return totalOccupance < 25 ?  basePrice - (basePrice * 0.1) :result;
-    }
-    private double calcBetween25And50Percent(double totalOccupance, double basePrice,  double result){
-        return totalOccupance > 25 && totalOccupance <= 50 ?  basePrice : result;
-    }
-    private double calcBetween50And75Percent(double totalOccupance, double basePrice,  double result){
-        return totalOccupance > 50 && totalOccupance <= 75 ?  basePrice + (basePrice * 0.1) : result;
-    }
-    private double calcBigger75Percent(double totalOccupance, double basePrice,  double result){
-        return totalOccupance > 75 ?  basePrice + (basePrice * 0.25) : result;
-    }
+
 }

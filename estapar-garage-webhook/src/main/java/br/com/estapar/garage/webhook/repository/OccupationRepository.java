@@ -20,4 +20,11 @@ public interface OccupationRepository extends JpaRepository<OccupationEntity, UU
             "JOIN FETCH s.sector " +
             "WHERE o.licensePlate = :licensePlate")
     Optional<OccupationEntity>findByLicensePlateJoinFetchSpotAndSector(@Param("licensePlate")String licensePlate);
+
+    @Query("SELECT o FROM OccupationEntity o " +
+            "JOIN FETCH o.spot s " +
+            "JOIN FETCH s.sector " +
+            "WHERE o.licensePlate = :licensePlate" +
+            " and s.occupied = true" )
+    Optional<OccupationEntity>findByLicensePlateJoinFetchSpotAndSectorAndIsOccupied(@Param("licensePlate")String licensePlate);
 }

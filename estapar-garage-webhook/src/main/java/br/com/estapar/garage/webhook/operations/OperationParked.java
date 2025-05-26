@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,6 +41,7 @@ public class OperationParked implements Operation{
             occupationEntity.setEventType(request.getEventType());
             occupationEntity.setStatus("Success");
             occupationEntity.setDetail("Estacionou sem problemas");
+            occupationEntity.setParkedTime(LocalDateTime.now());
 
             if(Objects.isNull(spot)){ //TODO - Esse if corrige a falha na operação conforme citado comentario acima
                 occupationEntity.setStatus("Vaga nao encontrada");

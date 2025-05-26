@@ -23,6 +23,7 @@ public class WebhookController {
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<String>post(@Valid @RequestBody OperationGarageRequest body){
         log.info("Recebendo requisição POST /webhook body = {}", body);
+        operationService.executeOperation(body);
         return ResponseEntity.ok("Success");
     }
 }

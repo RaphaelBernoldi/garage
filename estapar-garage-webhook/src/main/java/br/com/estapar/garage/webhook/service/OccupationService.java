@@ -20,13 +20,20 @@ public class OccupationService {
         occupationRepository.save(occupationEntity);
 
     }
-
     public OccupationEntity findByLicensePlateJoinFetchSpotAndSector(String licensePlate) throws BusinessException {
         log.info("Finding occupation by license plate = {}", licensePlate);
         return occupationRepository
                 .findByLicensePlateJoinFetchSpotAndSector(licensePlate)
                 .orElseThrow(() -> new BusinessException("Placa " + licensePlate + " nao encontrada"));
     }
+
+    public OccupationEntity findByLicensePlateJoinFetchSpotAndSectorAndIsOccupied(String licensePlate) throws BusinessException {
+        log.info("Finding occupation by license plate = {}", licensePlate);
+        return occupationRepository
+                .findByLicensePlateJoinFetchSpotAndSectorAndIsOccupied(licensePlate)
+                .orElseThrow(() -> new BusinessException("Placa " + licensePlate + " nao encontrada"));
+    }
+
     public OccupationEntity findByLicensePlate(String licensePlate) throws BusinessException {
         log.info("Finding occupation by license plate = {}", licensePlate);
         return occupationRepository

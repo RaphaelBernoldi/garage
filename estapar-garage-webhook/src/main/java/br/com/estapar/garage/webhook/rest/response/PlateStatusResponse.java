@@ -7,7 +7,7 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record PlateResponse(
+public record PlateStatusResponse(
           @JsonProperty("license_plate") String licensePlate
         , @JsonProperty("price_until_now") Double priceUntilNow
         , @JsonProperty("entry_time")LocalDateTime entryTime

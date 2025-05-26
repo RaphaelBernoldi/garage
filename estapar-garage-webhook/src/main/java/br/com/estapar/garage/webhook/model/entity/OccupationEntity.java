@@ -29,6 +29,10 @@ public class OccupationEntity {
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
     private LocalDateTime entryTime;
 
+    @Column(columnDefinition = "TIMESTAMP")
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+    private LocalDateTime parkedTime;
+
     @Enumerated(EnumType.STRING)
     private EnumEventType eventType;
 
