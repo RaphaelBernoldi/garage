@@ -1,0 +1,199 @@
+{
+	"info": {
+		"_postman_id": "6b00b5b5-9c38-45d1-8403-1a056890d46d",
+		"name": "estapar",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1991513"
+	},
+	"item": [
+		{
+			"name": "webhook-entry",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"license_plate\": \"ZUL0022\",\r\n  \"entry_time\": \"2025-05-26T12:00:00.000Z\",\r\n  \"event_type\": \"ENTRY\"\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/webhook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"webhook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "webhook-parked",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"license_plate\": \"ZUL0022\",\r\n  \"lat\": -23.561664,\r\n  \"lng\": -46.655961,\r\n  \"event_type\": \"PARKED\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/webhook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"webhook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "webhook-exit",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\t\t\r\n  \"license_plate\": \"ZUL0022\",\r\n  \"exit_time\": \"2025-05-26T14:00:00.000Z\",\r\n  \"event_type\": \"EXIT\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3003/webhook",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"webhook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "localhost:3000/garage",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/garage",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"garage"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get plate-status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/plate-status/ZUL0022",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"plate-status",
+						"ZUL0022"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get spot-status",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/spot-status/lat/-23.561664/lng/-46.655961",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"spot-status",
+						"lat",
+						"-23.561664",
+						"lng",
+						"-46.655961"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get revenue",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3003/revenue/date/2025-05-26/sector/A",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3003",
+					"path": [
+						"revenue",
+						"date",
+						"2025-05-26",
+						"sector",
+						"A"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
