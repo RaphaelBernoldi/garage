@@ -12,4 +12,5 @@ import java.util.UUID;
 public interface SectorRepository extends JpaRepository<SectorEntity, UUID> {
 
     List<SectorEntity>findByDateOperation(LocalDate date);
+    SectorEntity findByDateOperationAndName(LocalDate date, String name);
 }
